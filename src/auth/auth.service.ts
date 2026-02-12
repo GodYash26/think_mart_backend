@@ -81,15 +81,15 @@ export class AuthService {
     
     response.cookie("access_token", accessToken, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "strict",
+      secure: false,
+      sameSite: "lax",
       maxAge: 24 * 60 * 60 * 1000, 
     });
 
     response.cookie("refresh_token", refreshToken, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "strict",
+      secure: false,
+      sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
   }
