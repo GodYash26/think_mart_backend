@@ -13,8 +13,8 @@ import { LoginDto } from "./dto/create-auth.dto";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { CurrentUser } from "../decorators/current-user.decorator";
 import { User } from "./entities/auth.entity";
-import { RolesGuard } from "src/guards/role.guard";
-import { Roles } from "src/decorators/roles.decorator";
+import { RolesGuard } from "../guards/role.guard";
+import { Roles } from "../decorators/roles.decorator";
 import { UserRole } from "./entities/auth.entity";
 
 @Controller("auth")

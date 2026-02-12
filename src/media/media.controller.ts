@@ -14,8 +14,6 @@ import type { Express } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { imageUploadOptions } from "../config/multer.config";
 import { MediaService } from "./media.service";
-import { CreateMediaDto } from "./dto/create-media.dto";
-import { UpdateMediaDto } from "./dto/update-media.dto";
 
 @Controller('media')
 export class MediaController {
