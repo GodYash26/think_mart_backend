@@ -1,34 +1,49 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import {
+  Controller,
+  Post,
+  Body,
+  Res,
+  Get,
+  UseGuards,
+  Req,
+} from "@nestjs/common";
+import type { Response, Request } from "express";
+import { AuthService } from "./auth.service";
+import { LoginDto } from "./dto/create-auth.dto";
+import { JwtAuthGuard } from "../guards/jwt-auth.guard";
+import { CurrentUser } from "../decorators/current-user.decorator";
+import { User } from "./entities/auth.entity";
 
-@Controller('auth')
+@Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post()
-  create(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.create(createAuthDto);
+  @Post("login")
+  async login(
+    @Body() loginDto: LoginDto,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    return this.authService.login(loginDto, response);
   }
 
-  @Get()
-  findAll() {
-    return this.authService.findAll();
+  @Post("refresh")
+  async refresh(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    const refreshToken = request.cookies?.refresh_token;
+    return this.authService.refreshTokens(refreshToken, response);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  @Post("logout")
+  @UseGuards(JwtAuthGuard)
+  logout(@Res({ passthrough: true }) response: Response) {
+    return this.authService.logout(response);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
+  @Get("profile")
+  @UseGuards(JwtAuthGuard)
+  getProfile(@CurrentUser() user: User) {
+    return this.authService.getProfile(user._id.toString());
   }
 }

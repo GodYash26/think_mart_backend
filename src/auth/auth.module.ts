@@ -1,12 +1,38 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthService } from './auth.service';
-import { AuthController } from './auth.controller';
-import { User } from './entities/auth.entity';
+import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { JwtModule } from "@nestjs/jwt";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { PassportModule } from "@nestjs/passport";
+import { AuthService } from "./auth.service";
+import { AuthController } from "./auth.controller";
+import { User } from "./entities/auth.entity";
+import { JwtStrategy } from "../strategies/jwt.strategy";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    PassportModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => {
+        const secret = configService.get<string>("JWT_SECRET");
+        
+        if (!secret) {
+          throw new Error("JWT_SECRET is not defined in environment variables");
+        }
+        
+        return {
+          secret,
+          signOptions: { 
+            expiresIn: "1d"
+          },
+        };
+      },
+    }),
+  ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}
