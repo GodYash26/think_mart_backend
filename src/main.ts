@@ -49,6 +49,8 @@ async function bootstrap() {
     }),
   );
 
+  app.setGlobalPrefix("api");
+
   const config = new DocumentBuilder()
     .setTitle('ThinkMart API')
     .setDescription('API documentation')

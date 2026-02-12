@@ -6,7 +6,7 @@ dotenv.config();
 export const checkDatabaseConnection = async () => {
   const dataSource = new DataSource({
     type: 'mongodb',
-    url: process.env.MONGO_URI || 'mongodb://localhost:27017/thinkmart',
+    url: process.env.MONGO_URI
   });
 
   try {

@@ -6,6 +6,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { databaseConfig } from './config/database.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core/constants';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -21,6 +22,8 @@ import { APP_GUARD } from '@nestjs/core/constants';
       inject: [ConfigService],
       useFactory: databaseConfig,
     }),
+    MediaModule,
+    
   ],
 
 
