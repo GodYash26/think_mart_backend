@@ -21,9 +21,9 @@ async function bootstrap() {
 
   /* --------------------CORS Configuration-------------------- */
   const allowedOrigins = [
+    "https://think-mart.vercel.app",
     'http://localhost:5173',
     'http://localhost:3001', 
-    ""
   ];
   app.enableCors({
     origin: allowedOrigins,
