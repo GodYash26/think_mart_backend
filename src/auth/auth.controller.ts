@@ -22,8 +22,6 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post("login")
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.USER)
   async login(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response
@@ -32,8 +30,6 @@ export class AuthController {
   }
 
   @Post("refresh")
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.USER)
   async refresh(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response
