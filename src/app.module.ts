@@ -7,6 +7,7 @@ import { databaseConfig } from './config/database.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core/constants';
 import { MediaModule } from './media/media.module';
+import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
 
@@ -27,6 +28,7 @@ import { CategoriesModule } from './categories/categories.module';
     MediaModule,
     ProductsModule,
     CategoriesModule,
+    AuthModule,
     
   ],
 
