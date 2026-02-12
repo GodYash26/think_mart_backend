@@ -21,7 +21,7 @@ async function bootstrap() {
 
   /* --------------------CORS Configuration-------------------- */
   const allowedOrigins = [
-    'http://localhost:3000', // React frontend
+    'http://localhost:5173', // React frontend
     'http://localhost:3001', // Next.js frontend
   ];
   app.enableCors({
