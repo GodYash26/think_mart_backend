@@ -13,12 +13,17 @@ import { LoginDto } from "./dto/create-auth.dto";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { CurrentUser } from "../decorators/current-user.decorator";
 import { User } from "./entities/auth.entity";
+import { RolesGuard } from "src/guards/role.guard";
+import { Roles } from "src/decorators/roles.decorator";
+import { UserRole } from "./entities/auth.entity";
 
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post("login")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   async login(
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response
@@ -27,6 +32,8 @@ export class AuthController {
   }
 
   @Post("refresh")
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   async refresh(
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response
@@ -36,13 +43,15 @@ export class AuthController {
   }
 
   @Post("logout")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   logout(@Res({ passthrough: true }) response: Response) {
     return this.authService.logout(response);
   }
 
   @Get("profile")
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(UserRole.ADMIN, UserRole.USER)
   getProfile(@CurrentUser() user: User) {
     return this.authService.getProfile(user._id.toString());
   }

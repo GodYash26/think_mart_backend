@@ -7,7 +7,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { MongoRepository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
-import * as bcrypt from "bcryptjs";
+import * as bcrypt from "bcrypt";
 import { ObjectId } from "mongodb";
 import { User } from "./entities/auth.entity";
 import { LoginDto } from "./dto/create-auth.dto";

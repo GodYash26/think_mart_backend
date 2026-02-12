@@ -2,7 +2,6 @@ import multer, { memoryStorage } from "multer";
 import path from "path";
 import fs from "fs";
 import crypto from "crypto";
-import { MulterError as multerMulterError } from "multer";
 import { BadRequestException } from "@nestjs/common";
 import type { Request } from "express";
 
@@ -76,29 +75,7 @@ export const imageUploadOptions: multer.Options = {
   limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB limit
 };
 
-export const handleMulterError = (error: unknown) => {
-  if (!error) {
-    return;
-  }
 
-  if (error instanceof BadRequestException) {
-    throw error;
-  }
-
-  if (error instanceof multerMulterError) {
-    if (error.code === "LIMIT_FILE_SIZE") {
-      throw new BadRequestException("Image too large. Max size is 2 MB.");
-    }
-
-    if (error.code === "LIMIT_UNEXPECTED_FILE") {
-      throw new BadRequestException("Unexpected file field in upload.");
-    }
-
-    throw new BadRequestException(`Upload error: ${error.message}`);
-  }
-
-  throw new BadRequestException("Unable to process uploaded image.");
-};
 
 
 
