@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import type { Express } from "express";
 import ImageKit from "imagekit";
 import type { UploadResponse } from "imagekit/dist/libs/interfaces";
 
