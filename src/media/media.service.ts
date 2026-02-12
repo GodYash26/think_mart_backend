@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import type { Express } from "express";
 import { ObjectId } from "mongodb";
 import { MongoRepository } from "typeorm";
 import { ImagekitService } from "../config/imagekit.config";
