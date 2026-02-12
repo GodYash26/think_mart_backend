@@ -5,20 +5,18 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
-
-
+import { ObjectId } from "mongodb";
 
 @Entity("images")
 export class Media {
   @ObjectIdColumn()
-  _id: Object;
-
-//   image kit url field
-  @Column()
-  url: string; 
+  _id: ObjectId;
 
   @Column()
-  fileId: string; 
+  fileId: string;
+
+  @Column()
+  url: string;
 
   @Column()
   fileName: string;
@@ -28,6 +26,12 @@ export class Media {
 
   @Column({ nullable: true })
   mimeType?: string;
+
+  @Column({ nullable: true })
+  height?: number;
+
+  @Column({ nullable: true })
+  width?: number;
 
   @CreateDateColumn()
   createdAt: Date;

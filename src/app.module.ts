@@ -7,6 +7,8 @@ import { databaseConfig } from './config/database.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { APP_GUARD } from '@nestjs/core/constants';
 import { MediaModule } from './media/media.module';
+import { ProductsModule } from './products/products.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { MediaModule } from './media/media.module';
       useFactory: databaseConfig,
     }),
     MediaModule,
+    ProductsModule,
+    CategoriesModule,
     
   ],
 

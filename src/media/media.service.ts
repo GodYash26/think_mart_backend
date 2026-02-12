@@ -1,33 +1,62 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ObjectId } from "mongodb";
+import { MongoRepository } from "typeorm";
 import { ImagekitService } from "../config/imagekit.config";
 import { CreateMediaDto } from "./dto/create-media.dto";
 import { UpdateMediaDto } from "./dto/update-media.dto";
+import { Media } from "./entities/media.entity";
 
 @Injectable()
 export class MediaService {
-  constructor(private readonly imagekitService: ImagekitService) {}
+  constructor(
+    @InjectRepository(Media)
+    private readonly mediaRepository: MongoRepository<Media>,
+    private readonly imagekitService: ImagekitService
+  ) {}
 
   async uploadProductImage(file: Express.Multer.File) {
-    return this.imagekitService.uploadImage(file, "products");
+    const uploadResponse = await this.imagekitService.uploadImage(
+      file,
+      "products"
+    );
+
+    const media = this.mediaRepository.create({
+      fileId: uploadResponse.fileId,
+      url: uploadResponse.url,
+      fileName: uploadResponse.name,
+      size: uploadResponse.size,
+      height: uploadResponse.height,
+      width: uploadResponse.width,
+    });
+
+    const saved = await this.mediaRepository.save(media);
+
+    return {
+      message: "Image uploaded and saved successfully.",
+      media: saved,
+    };
   }
 
-  create(createMediaDto: CreateMediaDto) {
-    return 'This action adds a new media';
+  async findAll() {
+    return this.mediaRepository.find();
   }
 
-  findAll() {
-    return `This action returns all media`;
+  async findOne(id: string) {
+    const media = await this.mediaRepository.findOneBy({
+      _id: new ObjectId(id),
+    });
+
+    if (!media) {
+      throw new NotFoundException("Media not found.");
+    }
+
+    return media;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} media`;
-  }
-
-  update(id: number, updateMediaDto: UpdateMediaDto) {
-    return `This action updates a #${id} media`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} media`;
+  async remove(id: string) {
+    const media = await this.findOne(id);
+    await this.mediaRepository.deleteOne({ _id: media._id });
+    return { deleted: true };
   }
 }
