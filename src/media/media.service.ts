@@ -3,8 +3,6 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { ObjectId } from "mongodb";
 import { MongoRepository } from "typeorm";
 import { ImagekitService } from "../config/imagekit.config";
-import { CreateMediaDto } from "./dto/create-media.dto";
-import { UpdateMediaDto } from "./dto/update-media.dto";
 import { Media } from "./entities/media.entity";
 
 @Injectable()

@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from "@nestjs/common";
+import type { Express } from "express";
 import { FileInterceptor } from "@nestjs/platform-express";
 import { imageUploadOptions } from "../config/multer.config";
 import { MediaService } from "./media.service";
