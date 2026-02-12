@@ -77,17 +77,19 @@ export class AuthService {
     accessToken: string,
     refreshToken: string
   ) {
+    const isProduction = this.configService.get<string>("NODE_ENV") === "production";
+    
     response.cookie("access_token", accessToken, {
       httpOnly: true,
-      secure: this.configService.get<string>("NODE_ENV") === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "strict",
       maxAge: 24 * 60 * 60 * 1000, 
     });
 
     response.cookie("refresh_token", refreshToken, {
       httpOnly: true,
-      secure: this.configService.get<string>("NODE_ENV") === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
   }
