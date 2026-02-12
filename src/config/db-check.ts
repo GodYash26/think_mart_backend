@@ -5,12 +5,8 @@ dotenv.config();
 
 export const checkDatabaseConnection = async () => {
   const dataSource = new DataSource({
-    type: 'mysql',
-    host: process.env.DB_HOST || '127.0.0.1',
-    port: Number(process.env.DB_PORT) || 3306,
-    username: process.env.DB_USER || 'thinkmart',
-    password: process.env.DB_PASSWORD || 'thinkmart',
-    database: process.env.DB_NAME || 'thinkmart_db',
+    type: 'mongodb',
+    url: process.env.MONGO_URI || 'mongodb://localhost:27017/thinkmart',
   });
 
   try {
