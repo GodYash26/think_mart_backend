@@ -39,8 +39,6 @@ export class AuthController {
   }
 
   @Post("logout")
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.USER)
   logout(@Res({ passthrough: true }) response: Response) {
     return this.authService.logout(response);
   }
