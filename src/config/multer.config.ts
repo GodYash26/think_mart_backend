@@ -1,4 +1,5 @@
 import multer, { memoryStorage } from "multer";
+import type { Express } from "express";
 import path from "path";
 import fs from "fs";
 import crypto from "crypto";
