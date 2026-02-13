@@ -18,6 +18,14 @@ export class User {
     email: string;
 
     @Column()
+    address: string;
+
+    @Column({ unique: true })
+    phone: string;
+
+
+
+    @Column()
     password: string;
 
     @Column({ default: UserRole.USER })
