@@ -32,6 +32,11 @@ export class CreateProductDto {
 	@Min(0)
 	discountedPrice?: number;
 
+	@IsOptional()
+	@IsNumber()
+	@Min(0)
+	priceAfterDiscount?: number;
+
 	@IsNumber()
 	@Min(0)
 	deliveryCharge?: number;
@@ -48,10 +53,9 @@ export class CreateProductDto {
 	@IsNotEmpty()
 	unit: string;
 
-	@IsOptional()
 	@IsNumber()
 	@Min(0)
-	totalStock?: number;
+	totalStock: number;
 
 	@IsOptional()
 	@IsNumber()

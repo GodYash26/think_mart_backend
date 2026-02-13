@@ -16,22 +16,28 @@ export class Order {
   @ObjectIdColumn()
   _id: ObjectId;
 
-  @Column()
+  @Column("string")
   userId: ObjectId;
 
-  @Column(type => OrderItem)
+  @Column("array")
   items: OrderItem[];
 
-  @Column()
+  @Column("number")
+  subtotalAmount: number;
+
+  @Column("number")
+  deliveryCharge: number;
+
+  @Column("number")
   totalAmount: number;
 
-  @Column({ default: OrderStatus.PENDING })
+  @Column({ type: "string", default: OrderStatus.PENDING })
   status: OrderStatus;
 
-  @Column()
+  @Column("string")
   shippingAddress: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "string", nullable: true })
   paymentMethod: string;
 
   @CreateDateColumn()

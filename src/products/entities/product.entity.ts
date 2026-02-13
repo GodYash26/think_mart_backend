@@ -30,6 +30,9 @@ export class Product {
   discountedPrice: number;
 
   @Column("double", { default: 0 })
+  priceAfterDiscount: number;
+
+  @Column("double", { default: 0 })
   discountPercentage: number;
 
   @Column("double", { default: 0 })
@@ -45,10 +48,10 @@ export class Product {
   unit: string;
 
 
-  @Column("int")
+  @Column("int", { default: 0 })
   totalStock: number;
 
-  @Column("int")
+  @Column("int", { default: 0 })
   remainingStock: number;
 
   @Column("int", { default: 0 })

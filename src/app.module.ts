@@ -23,7 +23,7 @@ import { CartModule } from './cart/cart.module';
     }),
     ThrottlerModule.forRoot([{
       ttl: 60000, 
-      limit: 10,
+      limit: 1000,
     }]),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],

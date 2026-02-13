@@ -30,15 +30,11 @@ export class ProductsController {
   }
 
   @Get()
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
   findAll(@Query() query: QueryProductsDto) {
     return this.productsService.findAll(query);
   }
 
-    @Get(':id')
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @Get(':id')
   findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
   }

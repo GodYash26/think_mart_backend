@@ -42,10 +42,16 @@ export class ProductsService {
       discountedPrice
     );
 
+    // Set remainingStock to totalStock if not provided
+    const remainingStock = createProductDto.remainingStock ?? createProductDto.totalStock;
+    const soldQuantity = createProductDto.soldQuantity ?? 0;
+
     const product = this.productRepository.create({
       ...createProductDto,
       discountedPrice,
       discountPercentage,
+      remainingStock,
+      soldQuantity,
       isActive: createProductDto.isActive ?? true,
     });
 
@@ -277,6 +283,13 @@ export class ProductsService {
         product.discountedPrice
       );
     }
+
+    // If totalStock is updated and remainingStock is not provided, update remainingStock proportionally
+    if (updateProductDto.totalStock !== undefined && updateProductDto.remainingStock === undefined) {
+      const stockDifference = updateProductDto.totalStock - product.totalStock;
+      product.remainingStock = Math.max(0, product.remainingStock + stockDifference);
+    }
+
     return this.productRepository.save(product);
   }
 
