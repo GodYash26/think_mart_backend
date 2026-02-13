@@ -13,11 +13,15 @@ export class CreateProductDto {
 	@IsString()
 	@IsNotEmpty()
 	@MaxLength(120)
-	name: string;
+	productName: string;
 
+	@IsOptional()
 	@IsString()
-	@IsNotEmpty()
-	image: string;
+	description?: string;
+
+	@IsOptional()
+	@IsString()
+	images?: string;
 
 	@IsNumber()
 	@Min(0)
@@ -34,20 +38,44 @@ export class CreateProductDto {
 
 	@IsNumber()
 	@Min(0)
-	deliveryCharge: number;
+	deliveryCharge?: number;
 
 	@IsMongoId()
 	category: string;
 
+	@IsOptional()
 	@IsNumber()
 	@Min(0)
-	rating: number;
+	rating?: number;
 
 	@IsString()
 	@IsNotEmpty()
 	unit: string;
 
 	@IsOptional()
+	@IsNumber()
+	@Min(0)
+	totalStock?: number;
+
+	@IsOptional()
+	@IsNumber()
+	@Min(0)
+	remainingStock?: number;
+
+	@IsOptional()
+	@IsNumber()
+	@Min(0)
+	soldQuantity?: number;
+
+	@IsOptional()
 	@IsBoolean()
 	isActive?: boolean;
+
+	@IsOptional()
+	@IsBoolean()
+	isFeatured?: boolean;
+
+	@IsOptional()
+	@IsBoolean()
+	isDeleted?: boolean;
 }

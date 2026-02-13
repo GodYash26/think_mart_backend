@@ -4,20 +4,24 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  Index,
 } from "typeorm";
-   import { ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 
 @Entity("products")
 export class Product {
   @ObjectIdColumn()
   _id: ObjectId;
 
+  @Index({ unique: true, sparse: true })
   @Column()
-  name: string;
+  productName: string;
 
-  // store image id
   @Column()
-  image: string;
+  description: string;
+
+  @Column({ nullable: true })
+  images: string;
 
   @Column("double")
   originalPrice: number;
@@ -28,25 +32,41 @@ export class Product {
   @Column("double")
   discountPercentage: number;
 
-  @Column("double")
+  @Column("double", { default: 0 })
   deliveryCharge: number;
 
   @Column()
   category: string;
 
-  @Column("double")
+  @Column("double", { default: 0 })
   rating: number;
 
   @Column()
-  unit: string; // e.g "/kg"
+  unit: string;
+
+
+  @Column("int")
+  totalStock: number;
+
+  @Column("int")
+  remainingStock: number;
+
+  @Column("int", { default: 0 })
+  soldQuantity: number;
+
 
   @Column({ default: true })
   isActive: boolean;
+
+  @Column({ default: false })
+  isFeatured: boolean;
+
+  @Column({ default: false })
+  isDeleted: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
-
 }

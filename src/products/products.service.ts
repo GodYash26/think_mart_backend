@@ -4,6 +4,7 @@ import { ObjectId } from "mongodb";
 import { MongoRepository } from "typeorm";
 import { CategoriesService } from "../categories/categories.service";
 import { CreateProductDto } from "./dto/create-product.dto";
+import { QueryProductsDto } from "./dto/query-products.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
 import { Product } from "./entities/product.entity";
 
@@ -23,7 +24,10 @@ export class ProductsService {
   }
 
   async create(createProductDto: CreateProductDto) {
-    await this.categoriesService.findOne(createProductDto.category);
+    const category = await  this.categoriesService.findOne(createProductDto.category);
+    if (!category) {
+      throw new NotFoundException("Category not found.");
+    }
 
     const discountedPrice =
       createProductDto.discountedPrice ||
@@ -46,8 +50,39 @@ export class ProductsService {
     };
   }
 
-  async findAll() {
-    return this.productRepository.find();
+  async findAll(query: QueryProductsDto = {}) {
+    const match: Record<string, unknown> = {};
+
+    if (query.category) {
+      match.category = query.category;
+    }
+
+    if (query.search) {
+      match.productName = { $regex: query.search, $options: "i" };
+    }
+
+    if (query.minPrice !== undefined || query.maxPrice !== undefined) {
+      const priceFilter: Record<string, number> = {};
+
+      if (query.minPrice !== undefined) {
+        priceFilter.$gte = query.minPrice;
+      }
+
+      if (query.maxPrice !== undefined) {
+        priceFilter.$lte = query.maxPrice;
+      }
+
+      match.discountedPrice = priceFilter;
+    }
+
+    const pipeline: Array<Record<string, unknown>> =
+      Object.keys(match).length > 0 ? [{ $match: match }] : [];
+    pipeline.push({ $sort: { createdAt: -1 } });
+
+    return {
+      message: "Products retrieved successfully.",
+      products: await this.productRepository.aggregate(pipeline).toArray(),
+    };
   }
 
   async findOne(id: string) {
@@ -78,8 +113,5 @@ export class ProductsService {
     return { deleted: true };
   }
 
-  async checkAvailability(id: string) {
-    const product = await this.findOne(id);
-    return { available: product.isActive };
-  }
+ 
 }
