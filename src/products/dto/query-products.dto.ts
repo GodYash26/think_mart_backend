@@ -1,4 +1,4 @@
-import { IsMongoId, IsNumber, IsOptional, IsString, Min } from "class-validator";
+import { IsBoolean, IsMongoId, IsNumber, IsOptional, IsString, Min } from "class-validator";
 import { Transform } from "class-transformer";
 
 export class QueryProductsDto {
@@ -21,6 +21,27 @@ export class QueryProductsDto {
   @IsNumber()
   @Min(0)
   maxPrice?: number;
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    value === "" || value === undefined ? undefined : value === "true"
+  )
+  @IsBoolean()
+  isFeatured?: boolean;
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    value === "" || value === undefined ? undefined : value === "true"
+  )
+  @IsBoolean()
+  isPopular?: boolean;
+
+  @IsOptional()
+  @Transform(({ value }) =>
+    value === "" || value === undefined ? undefined : value === "true"
+  )
+  @IsBoolean()
+  isOffer?: boolean;
 
   @IsOptional()
   @Transform(({ value }) => (value === "" ? undefined : Number(value)))

@@ -82,6 +82,18 @@ export class ProductsService {
       match.discountedPrice = priceFilter;
     }
 
+    if (query.isFeatured !== undefined) {
+      match.isFeatured = query.isFeatured;
+    }
+
+    if (query.isPopular !== undefined) {
+      match.isPopular = query.isPopular;
+    }
+
+    if (query.isOffer !== undefined) {
+      match.isOffer = query.isOffer;
+    }
+
     const page = Math.max(1, query.page ?? 1);
     const limit = Math.min(100, Math.max(1, query.limit ?? 10));
     const skip = (page - 1) * limit;
