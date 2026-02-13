@@ -10,7 +10,7 @@ import { JwtService } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import * as bcrypt from "bcrypt";
 import { ObjectId } from "mongodb";
-import { AuthProvider, User } from "./entities/auth.entity";
+import { AuthProvider, User, UserRole } from "./entities/auth.entity";
 import { LoginDto } from "./dto/create-auth.dto";
 import { RegisterDto } from "./dto/register-auth.dto";
 import { Response } from "express";
@@ -46,7 +46,6 @@ export class AuthService {
     // Hash password
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
-    // Create new user
     const newUser = this.userRepository.create({
       fullname: registerDto.fullname,
       email: registerDto.email,
@@ -54,6 +53,7 @@ export class AuthService {
       phone: registerDto.phone,
       password: hashedPassword,
       provider: AuthProvider.LOCAL,
+      role: UserRole.CUSTOMER, 
     });
 
     const savedUser = await this.userRepository.save(newUser);
@@ -63,6 +63,12 @@ export class AuthService {
 
     // Set cookies
     this.setTokenCookies(response, accessToken, refreshToken);
+
+    console.log('User registered:', {
+      id: savedUser._id,
+      email: savedUser.email,
+      role: savedUser.role,
+    });
 
     return {
       message: "User registered successfully",
@@ -81,6 +87,12 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.generateTokens(user);
 
     this.setTokenCookies(response, accessToken, refreshToken);
+
+    console.log('User logged in:', {
+      id: user._id,
+      email: user.email,
+      role: user.role,
+    });
 
     return {
       message: "Login successful",
@@ -186,6 +198,12 @@ export class AuthService {
     if (!user) {
       throw new BadRequestException("User not found");
     }
+
+    console.log('Get profile:', {
+      id: user._id,
+      email: user.email,
+      role: user.role,
+    });
 
     return {
       id: user._id,

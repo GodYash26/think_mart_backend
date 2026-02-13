@@ -1,37 +1,42 @@
 import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  MinLength,
-  IsPhoneNumber,
-  IsOptional,
+    IsEmail,
+    IsNotEmpty,
+    IsString,
+    MinLength,
+    IsPhoneNumber,
+    IsOptional,
+    IsEnum,
 } from "class-validator";
-import { AuthProvider } from "../entities/auth.entity";
+import { AuthProvider, UserRole } from "../entities/auth.entity";
 
 export class RegisterDto {
-  @IsNotEmpty()
-  @IsString()
-  @MinLength(2)
-  fullname: string;
+    @IsNotEmpty()
+    @IsString()
+    @MinLength(2)
+    fullname: string;
 
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
+    @IsEmail()
+    @IsNotEmpty()
+    email: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(5)
-  address: string;
+    @IsString()
+    @IsNotEmpty()
+    @MinLength(5)
+    address: string;
 
-  @IsNotEmpty()
-  @IsString()
-  phone: string;
+    @IsNotEmpty()
+    @IsString()
+    phone: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(6)
-  password: string;
+    @IsString()
+    @IsNotEmpty()
+    @MinLength(6)
+    password: string;
 
-  @IsOptional()
-  AuthProvider: AuthProvider;
+    @IsOptional()
+    @IsEnum(UserRole)
+    role?: UserRole;
+
+    @IsOptional()
+    AuthProvider?: AuthProvider;
 }
