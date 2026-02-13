@@ -14,7 +14,7 @@ export class ProductsService {
     @InjectRepository(Product)
     private readonly productRepository: MongoRepository<Product>,
     private readonly categoriesService: CategoriesService
-  ) {}
+  ) { }
 
   private calculateDiscountPercentage(
     originalPrice: number,
@@ -30,7 +30,7 @@ export class ProductsService {
   }
 
   async create(createProductDto: CreateProductDto) {
-    const category = await  this.categoriesService.findOne(createProductDto.category);
+    const category = await this.categoriesService.findOne(createProductDto.category);
     if (!category) {
       throw new NotFoundException("Category not found.");
     }
@@ -84,10 +84,6 @@ export class ProductsService {
 
     if (query.isFeatured !== undefined) {
       match.isFeatured = query.isFeatured;
-    }
-
-    if (query.isPopular !== undefined) {
-      match.isPopular = query.isPopular;
     }
 
     if (query.isOffer !== undefined) {
@@ -290,5 +286,5 @@ export class ProductsService {
     return { deleted: true };
   }
 
- 
+
 }

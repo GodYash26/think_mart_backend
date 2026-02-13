@@ -29,12 +29,6 @@ export class QueryProductsDto {
   @IsBoolean()
   isFeatured?: boolean;
 
-  @IsOptional()
-  @Transform(({ value }) =>
-    value === "" || value === undefined ? undefined : value === "true"
-  )
-  @IsBoolean()
-  isPopular?: boolean;
 
   @IsOptional()
   @Transform(({ value }) =>

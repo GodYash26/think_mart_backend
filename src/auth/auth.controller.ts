@@ -10,6 +10,7 @@ import {
 import type { Response, Request } from "express";
 import { AuthService } from "./auth.service";
 import { LoginDto } from "./dto/create-auth.dto";
+import { RegisterDto } from "./dto/register-auth.dto";
 import { JwtAuthGuard } from "../guards/jwt-auth.guard";
 import { CurrentUser } from "../decorators/current-user.decorator";
 import { User } from "./entities/auth.entity";
@@ -20,6 +21,14 @@ import { UserRole } from "./entities/auth.entity";
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Post("register")
+  async register(
+    @Body() registerDto: RegisterDto,
+    @Res({ passthrough: true }) response: Response
+  ) {
+    return this.authService.register(registerDto, response);
+  }
 
   @Post("login")
   async login(
@@ -45,7 +54,7 @@ export class AuthController {
 
   @Get("profile")
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles(UserRole.ADMIN, UserRole.USER)
+  @Roles(UserRole.ADMIN, UserRole.CUSTOMER)
   getProfile(@CurrentUser() user: User) {
     return this.authService.getProfile(user._id.toString());
   }
