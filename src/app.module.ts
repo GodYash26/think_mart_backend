@@ -10,6 +10,10 @@ import { MediaModule } from './media/media.module';
 import { AuthModule } from './auth/auth.module';
 import { ProductsModule } from './products/products.module';
 import { CategoriesModule } from './categories/categories.module';
+import { UserModule } from './user/user.module';
+import { OrdersModule } from './orders/orders.module';
+import { FavoriteModule } from './favorite/favorite.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -29,6 +33,10 @@ import { CategoriesModule } from './categories/categories.module';
     ProductsModule,
     CategoriesModule,
     AuthModule,
+    UserModule,
+    OrdersModule,
+    FavoriteModule,
+    CartModule,
     
   ],
 
