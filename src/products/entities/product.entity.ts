@@ -62,6 +62,12 @@ export class Product {
   isFeatured: boolean;
 
   @Column({ default: false })
+  isPopular: boolean;
+
+  @Column({ default: false })
+  isOffer: boolean;
+
+  @Column({ default: false })
   isDeleted: boolean;
 
   @CreateDateColumn()

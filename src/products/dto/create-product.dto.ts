@@ -73,5 +73,13 @@ export class CreateProductDto {
 
 	@IsOptional()
 	@IsBoolean()
+	isPopular?: boolean;
+
+	@IsOptional()
+	@IsBoolean()
+	isOffer?: boolean;
+
+	@IsOptional()
+	@IsBoolean()
 	isDeleted?: boolean;
 }
