@@ -21,4 +21,16 @@ export class QueryProductsDto {
   @IsNumber()
   @Min(0)
   maxPrice?: number;
+
+  @IsOptional()
+  @Transform(({ value }) => (value === "" ? undefined : Number(value)))
+  @IsNumber()
+  @Min(1)
+  page?: number;
+
+  @IsOptional()
+  @Transform(({ value }) => (value === "" ? undefined : Number(value)))
+  @IsNumber()
+  @Min(1)
+  limit?: number;
 }

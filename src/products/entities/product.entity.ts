@@ -29,7 +29,7 @@ export class Product {
   @Column("double")
   discountedPrice: number;
 
-  @Column("double")
+  @Column("double", { default: 0 })
   discountPercentage: number;
 
   @Column("double", { default: 0 })

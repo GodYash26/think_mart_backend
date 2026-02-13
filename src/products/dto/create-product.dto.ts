@@ -34,10 +34,6 @@ export class CreateProductDto {
 
 	@IsNumber()
 	@Min(0)
-	discountPercentage: number;
-
-	@IsNumber()
-	@Min(0)
 	deliveryCharge?: number;
 
 	@IsMongoId()
