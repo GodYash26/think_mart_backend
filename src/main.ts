@@ -38,7 +38,7 @@ async function bootstrap() {
       'Accept',
       'Origin',
     ],
-    exposedHeaders: ['Set-Cookie'], // ✅ so frontend can read cookies if needed
+    exposedHeaders: ['Set-Cookie'], 
     preflightContinue: false,
     optionsSuccessStatus: 204,
     maxAge: 86400,
