@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
@@ -7,7 +8,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { checkDatabaseConnection } from './config/db-check';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.set("trust proxy", 1);
 
 
   /* --------------------Check Database Connection-------------------- */

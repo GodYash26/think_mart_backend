@@ -139,7 +139,7 @@ export class AuthService {
 
   private getCookieBaseOptions() {
     const nodeEnv = this.configService.get<string>("NODE_ENV") ?? "production";
-    const isProduction = nodeEnv !== "development";
+    const isProduction = nodeEnv === "production";
     const sameSite: "lax" | "none" = isProduction ? "none" : "lax";
     const secure = isProduction;
     const domain = this.configService.get<string>("COOKIE_DOMAIN");
