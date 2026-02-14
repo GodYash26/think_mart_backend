@@ -35,8 +35,7 @@ export class ProductsService {
       throw new NotFoundException("Category not found.");
     }
 
-    const discountedPrice =
-      createProductDto.discountedPrice ?? createProductDto.originalPrice;
+    const discountedPrice = createProductDto.discountedPrice ?? 0;
     const discountPercentage = this.calculateDiscountPercentage(
       createProductDto.originalPrice,
       discountedPrice
