@@ -137,25 +137,37 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
+  private getCookieBaseOptions() {
+    const nodeEnv = this.configService.get<string>("NODE_ENV") ?? "production";
+    const isProduction = nodeEnv !== "development";
+    const sameSite: "lax" | "none" = isProduction ? "none" : "lax";
+    const secure = isProduction;
+    const domain = this.configService.get<string>("COOKIE_DOMAIN");
+
+    return {
+      httpOnly: true,
+      secure,
+      sameSite,
+      path: "/",
+      ...(domain ? { domain } : {}),
+    };
+  }
+
   setTokenCookies(
     response: Response,
     accessToken: string,
     refreshToken: string
   ) {
-    const isProduction = this.configService.get<string>("NODE_ENV") === "production";
-    
+    const baseOptions = this.getCookieBaseOptions();
+
     response.cookie("access_token", accessToken, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
-      maxAge: 24 * 60 * 60 * 1000, 
+      ...baseOptions,
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     response.cookie("refresh_token", refreshToken, {
-      httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
+      ...baseOptions,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
   }
 
@@ -182,8 +194,10 @@ export class AuthService {
   }
 
   logout(response: Response) {
-    response.clearCookie("access_token");
-    response.clearCookie("refresh_token");
+    const baseOptions = this.getCookieBaseOptions();
+
+    response.clearCookie("access_token", baseOptions);
+    response.clearCookie("refresh_token", baseOptions);
 
     return {
       message: "Logout successful",
