@@ -6,13 +6,13 @@ export class Cart {
   @ObjectIdColumn()
   _id: ObjectId;
 
-  @Column()
+  @Column("string")
   userId: ObjectId;
 
-  @Column(type => CartItem)
+  @Column("array")
   items: CartItem[];
 
-  @Column({ default: 0 })
+  @Column("number", { default: 0 })
   totalAmount: number;
 
   @UpdateDateColumn()

@@ -1,34 +1,64 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Delete, UseGuards, BadRequestException } from '@nestjs/common';
 import { CartService } from './cart.service';
-import { CreateCartDto } from './dto/create-cart.dto';
-import { UpdateCartDto } from './dto/update-cart.dto';
+import { AddToCartDto } from './dto/create-cart.dto';
+import { UpdateCartItemDto, RemoveFromCartDto } from './dto/update-cart.dto';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { RolesGuard } from '../guards/role.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { CurrentUser } from '../decorators/current-user.decorator';
+import { User, UserRole } from '../auth/entities/auth.entity';
 
 @Controller('cart')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class CartController {
   constructor(private readonly cartService: CartService) {}
 
-  @Post()
-  create(@Body() createCartDto: CreateCartDto) {
-    return this.cartService.create(createCartDto);
+  @Post('add')
+  @Roles(UserRole.CUSTOMER)
+  addToCart(
+    @CurrentUser() user: User,
+    @Body() addToCartDto: AddToCartDto,
+  ) {
+    if (user.role !== UserRole.CUSTOMER) {
+      throw new BadRequestException('Only customers can add items to cart');
+    }
+    return this.cartService.addToCart(user._id.toString(), addToCartDto);
   }
 
   @Get()
-  findAll() {
-    return this.cartService.findAll();
+  @Roles(UserRole.CUSTOMER)
+  getCart(@CurrentUser() user: User) {
+    return this.cartService.getCart(user._id.toString());
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cartService.findOne(+id);
+  @Patch('update')
+  @Roles(UserRole.CUSTOMER)
+  updateCartItem(
+    @CurrentUser() user: User,
+    @Body() updateDto: UpdateCartItemDto & { productId: string },
+  ) {
+    return this.cartService.updateCartItem(
+      user._id.toString(),
+      updateDto.productId,
+      updateDto,
+    );
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
-    return this.cartService.update(+id, updateCartDto);
+  @Delete('remove')
+  @Roles(UserRole.CUSTOMER)
+  removeFromCart(
+    @CurrentUser() user: User,
+    @Body() removeDto: RemoveFromCartDto,
+  ) {
+    if (user.role !== UserRole.CUSTOMER) {
+      throw new BadRequestException('Only customers can remove items from cart');
+    }
+    return this.cartService.removeFromCart(user._id.toString(), removeDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cartService.remove(+id);
+  @Delete('clear')
+  @Roles(UserRole.CUSTOMER)
+  clearCart(@CurrentUser() user: User) {
+    return this.cartService.clearCart(user._id.toString());
   }
 }
