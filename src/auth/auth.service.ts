@@ -140,8 +140,12 @@ export class AuthService {
   private getCookieBaseOptions(response?: Response) {
     const nodeEnv = this.configService.get<string>("NODE_ENV") ?? "production";
     const isProduction = nodeEnv === "production";
-    const sameSite: "lax" | "none" = isProduction ? "none" : "lax";
-    const secure = isProduction;
+    const isSecureRequest =
+      response?.req?.secure ||
+      response?.req?.headers["x-forwarded-proto"] === "https";
+    const shouldUseNone = isProduction || isSecureRequest;
+    const sameSite: "lax" | "none" = shouldUseNone ? "none" : "lax";
+    const secure = shouldUseNone;
     const domain = this.configService.get<string>("COOKIE_DOMAIN");
     const requestHost = response?.req?.hostname;
     const shouldUseDomain =
