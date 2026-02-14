@@ -137,19 +137,24 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  private getCookieBaseOptions() {
+  private getCookieBaseOptions(response?: Response) {
     const nodeEnv = this.configService.get<string>("NODE_ENV") ?? "production";
     const isProduction = nodeEnv === "production";
     const sameSite: "lax" | "none" = isProduction ? "none" : "lax";
     const secure = isProduction;
     const domain = this.configService.get<string>("COOKIE_DOMAIN");
+    const requestHost = response?.req?.hostname;
+    const shouldUseDomain =
+      !!domain &&
+      !!requestHost &&
+      (requestHost === domain || requestHost.endsWith(`.${domain}`));
 
     return {
       httpOnly: true,
       secure,
       sameSite,
       path: "/",
-      ...(domain ? { domain } : {}),
+      ...(shouldUseDomain ? { domain } : {}),
     };
   }
 
@@ -158,7 +163,7 @@ export class AuthService {
     accessToken: string,
     refreshToken: string
   ) {
-    const baseOptions = this.getCookieBaseOptions();
+    const baseOptions = this.getCookieBaseOptions(response);
 
     response.cookie("access_token", accessToken, {
       ...baseOptions,
@@ -194,7 +199,7 @@ export class AuthService {
   }
 
   logout(response: Response) {
-    const baseOptions = this.getCookieBaseOptions();
+    const baseOptions = this.getCookieBaseOptions(response);
 
     response.clearCookie("access_token", baseOptions);
     response.clearCookie("refresh_token", baseOptions);
