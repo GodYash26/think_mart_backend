@@ -48,7 +48,7 @@ export class OrdersService {
         );
       }
 
-      // Calculate priceAfterDiscount if not already set
+      // Calculate priceAfterDiscount 
       const priceAfterDiscount = product.priceAfterDiscount || (product.originalPrice - product.discountedPrice);
       const subtotal = priceAfterDiscount * item.quantity;
       subtotalAmount += subtotal;

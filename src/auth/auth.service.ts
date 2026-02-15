@@ -64,12 +64,6 @@ export class AuthService {
     // Set cookies
     this.setTokenCookies(response, accessToken, refreshToken);
 
-    console.log('User registered:', {
-      id: savedUser._id,
-      email: savedUser.email,
-      role: savedUser.role,
-    });
-
     return {
       message: "User registered successfully",
       user: {
@@ -87,12 +81,6 @@ export class AuthService {
     const { accessToken, refreshToken } = await this.generateTokens(user);
 
     this.setTokenCookies(response, accessToken, refreshToken);
-
-    console.log('User logged in:', {
-      id: user._id,
-      email: user.email,
-      role: user.role,
-    });
 
     return {
       message: "Login successful",
@@ -222,11 +210,6 @@ export class AuthService {
       throw new BadRequestException("User not found");
     }
 
-    console.log('Get profile:', {
-      id: user._id,
-      email: user.email,
-      role: user.role,
-    });
 
     return {
       id: user._id,
