@@ -26,6 +26,8 @@ async function seedAdmin() {
             fullname: 'Ganesh Admin',
             email: adminEmail,
             password: hashedPassword,
+            phone: '9867564534',
+            address: 'Kathmandu, Nepal',
             role: UserRole.ADMIN,
 
         });
