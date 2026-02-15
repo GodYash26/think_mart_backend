@@ -70,7 +70,12 @@ export class AuthService {
         id: savedUser._id,
         email: savedUser.email,
         fullname: savedUser.fullname,
+        address: savedUser.address,
+        phone: savedUser.phone,
         role: savedUser.role,
+        provider: savedUser.provider,
+        createdAt: savedUser.createdAt,
+        updatedAt: savedUser.updatedAt,
       },
     };
   }
@@ -88,7 +93,12 @@ export class AuthService {
         id: user._id,
         email: user.email,
         fullname: user.fullname,
+        address: user.address,
+        phone: user.phone,
         role: user.role,
+        provider: user.provider,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       },
     };
   }
