@@ -21,21 +21,24 @@ async function seedAdmin() {
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     const exist = await repo.findOne({ where: { email: adminEmail } });
-    if (!exist) {
-        const adminUser = repo.create({
-            fullname: 'Ganesh Admin',
-            email: adminEmail,
-            password: hashedPassword,
-            phone: '9867564534',
-            address: 'Kathmandu, Nepal',
-            role: UserRole.ADMIN,
-
-        });
-
-        await repo.save(adminUser);
+    if (exist) {
+        await AppDataSource.destroy();
+        throw new Error(`Admin with email ${adminEmail} already exists`);
     }
+
+    const adminUser = repo.create({
+        fullname: 'Ganesh Admin',
+        email: adminEmail,
+        password: hashedPassword,
+        phone: '9867564534',
+        address: 'Kathmandu, Nepal',
+        role: UserRole.ADMIN,
+
+    });
+
+    await repo.save(adminUser);
     await AppDataSource.destroy();
-    console.log('Admin user seeding completed');
+    console.log('Admin user created successfully');
 }
 
 seedAdmin().catch((err) => {
